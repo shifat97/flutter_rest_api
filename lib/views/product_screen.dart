@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rest_api/rest_api/rest_client.dart';
 import 'package:flutter_rest_api/styles/styles.dart';
+import 'package:flutter_rest_api/utils/utils.dart';
 import 'package:flutter_rest_api/views/product_create_screen.dart';
+import 'package:flutter_rest_api/views/product_update_screen.dart';
 
 class ProductScreen extends StatefulWidget {
   const ProductScreen({super.key});
@@ -46,6 +48,8 @@ class _ProductScreenState extends State<ProductScreen> {
               setState(() {
                 productList.removeAt(index);
               });
+
+              AppUtils.successToast('Deletion successful');
             },
             child: const Text('Yes'),
           ),
@@ -64,10 +68,18 @@ class _ProductScreenState extends State<ProductScreen> {
     Navigator.push(context, MaterialPageRoute(builder: (context) => ProductCreateScreen()));
   }
 
+  void moveToProductUpdateScreen(Map<String, dynamic> singleData) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => ProductUpdateScreen(formSingleData: singleData))
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: AppStyles.colorGreen,
         title: const Text(
           'List Product',
@@ -138,7 +150,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                 children: [
                                   InkWell(
                                     onTap: () {
-                                      moveToCreateProductPage();
+                                      moveToProductUpdateScreen(productList[index]);
                                     },
                                     child: Icon(
                                       Icons.edit_note,

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:flutter_rest_api/utils/utils.dart';
 import 'package:http/http.dart' as http;
 
 class RestClient {
@@ -12,12 +11,26 @@ class RestClient {
     var responseBody = json.decode(response.body);
 
     if (response.statusCode == 200 && responseBody['status'] == 'success') {
-      AppUtils.successToast('Request Success');
       return true;
     } else {
-      AppUtils.errorToast('Request failed! Try again');
       return false;
     }
+  }
+
+  Future<bool> productUpdateRequest(formData, id) async {
+     var url = Uri.parse('https://crud.teamrabbil.com/api/v1/UpdateProduct/$id');
+     var postHeader = {'content-type': 'application/json'};
+
+     var updatedBody = json.encode(formData);
+
+     var response = await http.post(url, headers: postHeader, body: updatedBody);
+     var responseBody = json.decode(response.body);
+
+     if (response.statusCode == 200 && responseBody['status'] == 'success') {
+       return true;
+     } else {
+       return false;
+     }
   }
 
   Future<List> productReadRequest() async {
@@ -28,10 +41,8 @@ class RestClient {
      var responseBody = json.decode(response.body);
 
      if (response.statusCode == 200 && responseBody['status'] == 'success') {
-       AppUtils.successToast('Request Success');
        return responseBody['data'];
      } else {
-       AppUtils.errorToast('Request failed! Try again');
        return [];
      }
   }
@@ -44,10 +55,8 @@ class RestClient {
      var responseBody = json.decode(response.body);
 
      if (response.statusCode == 200 && responseBody['status'] == 'success') {
-       AppUtils.successToast('Delete successful!');
        return true;
      } else {
-       AppUtils.errorToast('Deletion failed');
        return false;
      }
   }
